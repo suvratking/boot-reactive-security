@@ -24,7 +24,7 @@ public class UserService {
         return userRepository
                 .findAll()
                 .collectList()
-                .map(users ->  new ResponseEntity<>(new UserResponse(users), HttpStatus.OK));
+                .map(users -> new ResponseEntity<>(new UserResponse(users), HttpStatus.OK));
     }
 
     public Mono<ResponseEntity<User>> createUser(Mono<UserRequest> userRequest) {
