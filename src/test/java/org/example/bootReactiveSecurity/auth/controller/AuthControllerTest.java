@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.test.annotation.DirtiesContext;
@@ -109,7 +110,7 @@ class AuthControllerTest {
         AuthenticationRequest authRequest = new AuthenticationRequest("testuser", "wrongpassword");
         
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
-                .thenReturn(Mono.error(new RuntimeException("Invalid credentials")));
+                .thenReturn(Mono.error(new BadCredentialsException("Invalid credentials")));
 
         webTestClient.post()
                 .uri("/auth/login")

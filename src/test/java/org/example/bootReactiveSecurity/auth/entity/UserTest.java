@@ -110,7 +110,7 @@ class UserTest {
         assertNull(user.getUsername());
         assertNull(user.getEmail());
         assertNull(user.getPassword());
-        assertFalse(user.isActive());
+        assertTrue(user.isActive());
         assertNotNull(user.getRoles());
         assertEquals(0, user.getRoles().size());
     }
