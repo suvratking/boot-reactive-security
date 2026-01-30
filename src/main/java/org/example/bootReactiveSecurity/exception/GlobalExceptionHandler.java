@@ -2,6 +2,7 @@ package org.example.bootReactiveSecurity.exception;
 
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -23,6 +24,11 @@ public class GlobalExceptionHandler {
                 ));
 
         return Mono.just(ResponseEntity.badRequest().body(errors));
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public Mono<ResponseEntity<?>> handleBadCredentialsException(BadCredentialsException ex) {
+        return Mono.just(ResponseEntity.status(401).body(ex.getMessage()));
     }
 
 }
