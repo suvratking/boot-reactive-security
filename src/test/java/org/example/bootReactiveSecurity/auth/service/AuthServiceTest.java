@@ -57,7 +57,7 @@ class AuthServiceTest {
         when(passwordEncoder.encode("password")).thenReturn("encodedPassword");
         when(userRepository.save(any(User.class))).thenReturn(Mono.just(user));
 
-        Mono<ResponseEntity<User>> result = authService.register(userRequest);
+        Mono<ResponseEntity<User>> result = authService.register(Mono.just(userRequest));
 
         StepVerifier.create(result)
                 .assertNext(responseEntity -> {
@@ -75,7 +75,7 @@ class AuthServiceTest {
     void register_ShouldThrowException_WhenUserExists() {
         when(userRepository.findById("1")).thenReturn(Mono.just(user));
 
-        Mono<ResponseEntity<User>> result = authService.register(userRequest);
+        Mono<ResponseEntity<User>> result = authService.register(Mono.just(userRequest));
 
         StepVerifier.create(result)
                 .expectErrorMatches(throwable -> throwable instanceof RuntimeException &&

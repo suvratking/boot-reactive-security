@@ -163,7 +163,7 @@ class AuthControllerTest {
                 .roles(List.of("ROLE_USER"))
                 .build();
         
-        when(authService.register(any(UserRequest.class)))
+        when(authService.register(any()))
                 .thenReturn(Mono.just(ResponseEntity.ok(registeredUser)));
 
         webTestClient.post()
@@ -220,7 +220,7 @@ class AuthControllerTest {
                 List.of("ROLE_USER")
         );
         
-        when(authService.register(any(UserRequest.class)))
+        when(authService.register(any()))
                 .thenReturn(Mono.error(new RuntimeException("User already exists")));
 
         webTestClient.post()

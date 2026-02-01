@@ -1,6 +1,12 @@
 package org.example.bootReactiveSecurity.auth.controller;
 
+import jakarta.validation.Validation;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.example.bootReactiveSecurity.admin.dto.UserRequest;
 import org.example.bootReactiveSecurity.auth.config.JwtTokenProvider;
 import org.example.bootReactiveSecurity.auth.dto.AuthenticationRequest;
@@ -16,11 +22,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.Map;
 
 import jakarta.validation.Valid;
+
+import static java.util.stream.Collectors.joining;
 
 /**
  * @author hantsy
@@ -54,8 +64,42 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public Mono<ResponseEntity<User>> register(@Valid @RequestBody UserRequest userRequest) {
+    public Mono<ResponseEntity<User>> register(@Validated @RequestBody Mono<UserRequest> userRequest) {
+        /*var validator = Validation.buildDefaultValidatorFactory().getValidator();
+        var violations = validator.validate(userRequest);
+        if (!violations.isEmpty()) {
+            var message = violations.stream()
+                    .map(v -> v.getPropertyPath() + " " + v.getMessage())
+                    .collect(joining(", "));
+            return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, message));
+        }*/
         return authService.register(userRequest);
     }
 
+    @PostMapping("/v1/register")
+    public Mono<ResponseEntity<Request>> validate(@Valid @RequestBody Mono<Request> userRequest) {
+        var validator = Validation.buildDefaultValidatorFactory().getValidator();
+        var violations = validator.validate(userRequest);
+        if (!violations.isEmpty()) {
+            var message = violations.stream()
+                    .map(v -> v.getPropertyPath() + " " + v.getMessage())
+                    .collect(joining(", "));
+            return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, message));
+        }
+        return userRequest.map(ResponseEntity::ok);
+    }
+
+}
+
+@Getter
+@Setter
+class Request {
+    @NotEmpty
+    String id;
+    @NotEmpty String username;
+    @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}",
+            flags = Pattern.Flag.CASE_INSENSITIVE) String email;
+    @NotEmpty String password;
+    boolean active;
+    @NotEmpty List<String> roles;
 }

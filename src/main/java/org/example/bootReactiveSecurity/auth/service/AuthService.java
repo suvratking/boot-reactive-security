@@ -17,16 +17,17 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Mono<ResponseEntity<User>> register(UserRequest userRequest) {
-        return userRepository
-                .findById(userRequest.id())
+    public Mono<ResponseEntity<User>> register(Mono<UserRequest> userRequest) {
+        return userRequest
+                .flatMap(req -> userRepository
+                .findById(req.id())
                 .flatMap(_ -> Mono.<User>error(new RuntimeException("User already exists")))
                 .switchIfEmpty(Mono.defer(() -> {
                     User newUser = new User();
-                    BeanUtils.copyProperties(userRequest, newUser);
-                    newUser.setPassword(passwordEncoder.encode(userRequest.password()));
+                    BeanUtils.copyProperties(req, newUser);
+                    newUser.setPassword(passwordEncoder.encode(req.password()));
                     return userRepository.save(newUser);
-                }))
+                })))
                 .map(ResponseEntity::ok);
     }
 
