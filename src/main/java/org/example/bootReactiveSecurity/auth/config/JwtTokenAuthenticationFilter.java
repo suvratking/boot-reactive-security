@@ -14,6 +14,10 @@ import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+/**
+ * Web filter for JWT token authentication.
+ * Intercepts requests to validate the JWT token and set the authentication context.
+ */
 @RequiredArgsConstructor
 public class JwtTokenAuthenticationFilter implements WebFilter {
 
@@ -21,6 +25,14 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
 
     private final JwtTokenProvider tokenProvider;
 
+    /**
+     * Filters incoming requests to check for a valid JWT token.
+     * If a valid token is found, it extracts authentication details and sets the security context.
+     *
+     * @param exchange the current server web exchange.
+     * @param chain    the web filter chain.
+     * @return a {@link Mono} indicating when request processing is complete.
+     */
     @Override
     @NullMarked
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
@@ -34,6 +46,13 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
         return chain.filter(exchange);
     }
 
+    /**
+     * Resolves the JWT token from the request headers.
+     * Looks for the "Authorization" header starting with "Bearer ".
+     *
+     * @param request the server HTTP request.
+     * @return the JWT token string if found, or {@code null} otherwise.
+     */
     private String resolveToken(ServerHttpRequest request) {
         var bearerToken = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(HEADER_PREFIX)) {

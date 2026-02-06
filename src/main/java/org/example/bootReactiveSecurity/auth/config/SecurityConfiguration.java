@@ -23,14 +23,34 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+/**
+ * Configuration class for security settings.
+ * Configures authentication, authorization, CORS, and password encoding.
+ */
 @Configuration
 public class SecurityConfiguration {
 
+    /**
+     * Creates a password encoder bean.
+     * Uses delegating password encoder to support multiple encoding formats.
+     *
+     * @return a {@link PasswordEncoder} instance.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+    /**
+     * Configures the security filter chain.
+     * Sets up CORS, CSRF, authentication manager, security context repository, and authorization rules.
+     * Adds the JWT token authentication filter.
+     *
+     * @param http                        the {@link ServerHttpSecurity} to configure.
+     * @param tokenProvider               the {@link JwtTokenProvider} for JWT operations.
+     * @param reactiveAuthenticationManager the {@link ReactiveAuthenticationManager} for authentication.
+     * @return a {@link SecurityWebFilterChain} defining the security filter chain.
+     */
     @Bean
     SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http,
                                                 JwtTokenProvider tokenProvider,
@@ -53,6 +73,13 @@ public class SecurityConfiguration {
 
     }
 
+    /**
+     * Checks if the current user matches the user ID in the path variable.
+     *
+     * @param authentication the current authentication.
+     * @param context        the authorization context containing path variables.
+     * @return a {@link Mono} emitting an {@link AuthorizationDecision}.
+     */
     private Mono<AuthorizationDecision> currentUserMatchesPath(Mono<Authentication> authentication,
                                                                AuthorizationContext context) {
         return authentication
@@ -61,6 +88,13 @@ public class SecurityConfiguration {
 
     }
 
+    /**
+     * Creates a reactive user details service bean.
+     * Loads user details from the repository and converts them to Spring Security's User object.
+     *
+     * @param users the {@link UserRepository} to retrieve user data.
+     * @return a {@link ReactiveUserDetailsService} instance.
+     */
     @Bean
     public ReactiveUserDetailsService userDetailsService(UserRepository users) {
 
@@ -76,6 +110,14 @@ public class SecurityConfiguration {
                 );
     }
 
+    /**
+     * Creates a reactive authentication manager bean.
+     * Configures it with the user details service and password encoder.
+     *
+     * @param userDetailsService the {@link ReactiveUserDetailsService} to load user data.
+     * @param passwordEncoder    the {@link PasswordEncoder} to verify passwords.
+     * @return a {@link ReactiveAuthenticationManager} instance.
+     */
     @Bean
     public ReactiveAuthenticationManager reactiveAuthenticationManager(ReactiveUserDetailsService userDetailsService,
                                                                        PasswordEncoder passwordEncoder) {
@@ -84,6 +126,12 @@ public class SecurityConfiguration {
         return authenticationManager;
     }
 
+    /**
+     * Configures CORS settings.
+     * Allows all origins, methods, and headers, and enables credentials.
+     *
+     * @return a {@link CorsConfigurationSource} instance.
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         var config = new CorsConfiguration();
