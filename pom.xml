@@ -123,7 +123,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
+                <!--<executions>
                     <execution>
                         <id>process-aot</id>
                         <phase>process-classes</phase>
@@ -131,7 +131,7 @@
                             <goal>process-aot</goal>
                         </goals>
                     </execution>
-                </executions>
+                </executions>-->
                 <configuration>
                     <excludes>
                         <exclude>
