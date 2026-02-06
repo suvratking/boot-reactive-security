@@ -8,7 +8,7 @@
         <version>4.0.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>org.example</groupId>
+    <groupId>com.github.suvratking</groupId>
     <artifactId>boot-reactive-security</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>boot-reactive-security</name>
@@ -26,6 +26,13 @@
         <tag/>
         <url/>
     </scm>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Maven Packages</name>
+            <url>https://maven.pkg.github.com/suvratking/boot-reactive-security</url>
+        </repository>
+    </distributionManagement>
     <properties>
         <java.version>25</java.version>
         <jjwt.version>0.13.0</jjwt.version>
