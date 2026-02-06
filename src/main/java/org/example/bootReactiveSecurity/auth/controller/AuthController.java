@@ -33,6 +33,9 @@ import jakarta.validation.Valid;
 import static java.util.stream.Collectors.joining;
 
 /**
+ * Controller for authentication-related operations.
+ * Handles user login and registration.
+ *
  * @author hantsy
  */
 @RestController
@@ -45,6 +48,12 @@ public class AuthController {
     private final ReactiveAuthenticationManager authenticationManager;
     private final AuthService authService;
 
+    /**
+     * Authenticates a user and returns a JWT token.
+     *
+     * @param authRequest a {@link Mono} containing the {@link AuthenticationRequest} with username and password.
+     * @return a {@link Mono} emitting a {@link ResponseEntity} containing the access token and authorization header.
+     */
     @PostMapping("/login")
     public Mono<ResponseEntity<?>> login(
             @Valid @RequestBody Mono<AuthenticationRequest> authRequest) {
@@ -63,6 +72,12 @@ public class AuthController {
 
     }
 
+    /**
+     * Registers a new user.
+     *
+     * @param userRequest a {@link Mono} containing the {@link UserRequest} with the new user's details.
+     * @return a {@link Mono} emitting a {@link ResponseEntity} containing the registered {@link User}.
+     */
     @PostMapping("/register")
     public Mono<ResponseEntity<User>> register(@Validated @RequestBody Mono<UserRequest> userRequest) {
         /*var validator = Validation.buildDefaultValidatorFactory().getValidator();
@@ -76,6 +91,12 @@ public class AuthController {
         return authService.register(userRequest);
     }
 
+    /**
+     * Validates a registration request (version 1).
+     *
+     * @param userRequest a {@link Mono} containing the {@link Request} to be validated.
+     * @return a {@link Mono} emitting a {@link ResponseEntity} containing the validated {@link Request}.
+     */
     @PostMapping("/v1/register")
     public Mono<ResponseEntity<Request>> validate(@Valid @RequestBody Mono<Request> userRequest) {
         var validator = Validation.buildDefaultValidatorFactory().getValidator();

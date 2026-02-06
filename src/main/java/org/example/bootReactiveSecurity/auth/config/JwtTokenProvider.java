@@ -23,6 +23,10 @@ import java.util.Date;
 
 import static java.util.stream.Collectors.joining;
 
+/**
+ * Component for generating and validating JWT tokens.
+ * Handles token creation, authentication extraction, and validation.
+ */
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -35,6 +39,10 @@ public class JwtTokenProvider {
 
     private SecretKey secretKey;
 
+    /**
+     * Initializes the secret key for signing JWTs.
+     * Encodes the raw key using Base64 and creates an HMAC SHA key.
+     */
     @PostConstruct
     public void init() {
         var secret = Base64.getEncoder()
@@ -42,6 +50,12 @@ public class JwtTokenProvider {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
+    /**
+     * Creates a JWT token for the authenticated user.
+     *
+     * @param authentication the {@link Authentication} object containing user details and authorities.
+     * @return a {@link String} representing the generated JWT token.
+     */
     public String createToken(Authentication authentication) {
 
         var username = authentication.getName();
@@ -62,6 +76,13 @@ public class JwtTokenProvider {
 
     }
 
+    /**
+     * Retrieves the authentication object from a given JWT token.
+     * Parses the token to extract claims, including the subject (username) and authorities (roles).
+     *
+     * @param token the JWT token string.
+     * @return an {@link Authentication} object representing the user and their authorities.
+     */
     public Authentication getAuthentication(String token) {
         var claims = Jwts.parser().verifyWith(this.secretKey).build()
                 .parseSignedClaims(token).getPayload();
@@ -77,6 +98,13 @@ public class JwtTokenProvider {
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
+    /**
+     * Validates the given JWT token.
+     * Checks if the token is correctly signed and has not expired.
+     *
+     * @param token the JWT token string to validate.
+     * @return {@code true} if the token is valid, {@code false} otherwise.
+     */
     public boolean validateToken(String token) {
         try {
             var claims = Jwts.parser().verifyWith(this.secretKey)
