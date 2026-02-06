@@ -67,7 +67,7 @@ public class UserService {
      * @return a {@link Mono} emitting a {@link ResponseEntity} containing the updated {@link User}.
      * @throws RuntimeException if the user with the specified ID is not found.
      */
-    public Mono<ResponseEntity<User>> updateUser(Mono<UserRequest> userRequest, String id) {
+    public Mono<ResponseEntity<User>> updateUser(Mono<UserRequest> userRequest, Long id) {
         return userRepository
                 .findById(id)
                 .switchIfEmpty(Mono.error(new RuntimeException("User not found with id: " + id)))
@@ -88,7 +88,7 @@ public class UserService {
      * @return a {@link Mono} emitting a {@link ResponseEntity} containing the deleted {@link User}.
      * @throws RuntimeException if the user with the specified ID is not found.
      */
-    public Mono<ResponseEntity<User>> deleteUser(String id) {
+    public Mono<ResponseEntity<User>> deleteUser(Long id) {
         return userRepository
                 .findById(id)
                 .flatMap(existingUser ->
@@ -106,7 +106,7 @@ public class UserService {
      * @return a {@link Mono} emitting a {@link ResponseEntity} containing the found {@link User}.
      * @throws RuntimeException if the user with the specified ID is not found.
      */
-    public Mono<ResponseEntity<User>> findUserById(String id) {
+    public Mono<ResponseEntity<User>> findUserById(Long id) {
         return userRepository
                 .findById(id)
                 .switchIfEmpty(Mono.error(new RuntimeException("User not found with id: " + id)))

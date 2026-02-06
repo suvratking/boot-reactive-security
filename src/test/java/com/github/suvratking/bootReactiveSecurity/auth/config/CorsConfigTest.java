@@ -7,6 +7,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
+import org.springframework.mock.web.server.MockServerWebExchange;
+import org.springframework.web.server.ServerWebExchange;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,6 +20,8 @@ class CorsConfigTest {
     @Autowired
     private CorsConfigurationSource corsConfigurationSource;
 
+    private final ServerWebExchange exchange = MockServerWebExchange.from(MockServerHttpRequest.get("/"));
+
     @Test
     void corsConfigurationSource_ShouldBeConfigured() {
         assertNotNull(corsConfigurationSource);
@@ -24,7 +29,7 @@ class CorsConfigTest {
 
     @Test
     void corsConfiguration_ShouldAllowAllOrigins() {
-        CorsConfiguration corsConfig = corsConfigurationSource.getCorsConfiguration(null);
+        CorsConfiguration corsConfig = corsConfigurationSource.getCorsConfiguration(exchange);
 
         assertNotNull(corsConfig);
         assertNotNull(corsConfig.getAllowedOriginPatterns());
@@ -33,7 +38,7 @@ class CorsConfigTest {
 
     @Test
     void corsConfiguration_ShouldAllowAllHttpMethods() {
-        CorsConfiguration corsConfig = corsConfigurationSource.getCorsConfiguration(null);
+        CorsConfiguration corsConfig = corsConfigurationSource.getCorsConfiguration(exchange);
 
         assertNotNull(corsConfig);
         assertNotNull(corsConfig.getAllowedMethods());
@@ -47,7 +52,7 @@ class CorsConfigTest {
 
     @Test
     void corsConfiguration_ShouldAllowAllHeaders() {
-        CorsConfiguration corsConfig = corsConfigurationSource.getCorsConfiguration(null);
+        CorsConfiguration corsConfig = corsConfigurationSource.getCorsConfiguration(exchange);
 
         assertNotNull(corsConfig);
         assertNotNull(corsConfig.getAllowedHeaders());
@@ -56,7 +61,7 @@ class CorsConfigTest {
 
     @Test
     void corsConfiguration_ShouldExposeAuthorizationHeader() {
-        CorsConfiguration corsConfig = corsConfigurationSource.getCorsConfiguration(null);
+        CorsConfiguration corsConfig = corsConfigurationSource.getCorsConfiguration(exchange);
 
         assertNotNull(corsConfig);
         assertNotNull(corsConfig.getExposedHeaders());
@@ -65,7 +70,7 @@ class CorsConfigTest {
 
     @Test
     void corsConfiguration_ShouldAllowCredentials() {
-        CorsConfiguration corsConfig = corsConfigurationSource.getCorsConfiguration(null);
+        CorsConfiguration corsConfig = corsConfigurationSource.getCorsConfiguration(exchange);
 
         assertNotNull(corsConfig);
         assertTrue(corsConfig.getAllowCredentials());
@@ -73,7 +78,7 @@ class CorsConfigTest {
 
     @Test
     void corsConfiguration_ShouldHaveMaxAge() {
-        CorsConfiguration corsConfig = corsConfigurationSource.getCorsConfiguration(null);
+        CorsConfiguration corsConfig = corsConfigurationSource.getCorsConfiguration(exchange);
 
         assertNotNull(corsConfig);
         assertEquals(3600L, corsConfig.getMaxAge());

@@ -1,5 +1,6 @@
 package com.github.suvratking.bootReactiveSecurity.auth.service;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import com.github.suvratking.bootReactiveSecurity.admin.dto.UserRequest;
 import com.github.suvratking.bootReactiveSecurity.auth.entity.User;
@@ -9,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+
+import java.util.Optional;
 
 /**
  * Service class for authentication-related operations.
@@ -35,13 +38,32 @@ public class AuthService {
                 .flatMap(req -> userRepository
                 .findById(req.id())
                 .flatMap(_ -> Mono.<User>error(new RuntimeException("User already exists")))
-                .switchIfEmpty(Mono.defer(() -> {
-                    User newUser = new User();
-                    BeanUtils.copyProperties(req, newUser);
-                    newUser.setPassword(passwordEncoder.encode(req.password()));
-                    return userRepository.save(newUser);
-                })))
+                .switchIfEmpty(Mono.defer(() ->
+                    this
+                        .getMaxId()
+                        .flatMap(id -> {
+                            User newUser = new User();
+                            BeanUtils.copyProperties(req, newUser);
+                            newUser.setPassword(passwordEncoder.encode(req.password()));
+                            newUser.setId(id);
+                            return userRepository.save(newUser);
+                        })
+                )))
                 .map(ResponseEntity::ok);
+    }
+
+    @PostConstruct
+    public void test() {
+        userRepository
+                .findTopByOrderByIdDesc()
+                .subscribe(IO::println);
+    }
+
+    private Mono<Long> getMaxId() {
+        return userRepository
+                .findTopByOrderByIdDesc()
+                .map(user -> user.getId() + 1L)
+                .switchIfEmpty(Mono.just(0L));
     }
 
 }

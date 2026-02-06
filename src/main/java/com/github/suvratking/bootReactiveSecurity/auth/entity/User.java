@@ -22,7 +22,7 @@ public class User {
 
     @MongoId
     @Id
-    private String id;
+    private Long id;
 
     private String username;
 

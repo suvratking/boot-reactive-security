@@ -34,6 +34,10 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
     @Override
     @NullMarked
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        if (exchange.getRequest().getURI().getPath().startsWith("/swagger")
+                || exchange.getRequest().getURI().getPath().startsWith("/v3/api-docs")) {
+            return chain.filter(exchange);
+        }
         var token = resolveToken(exchange.getRequest());
         if (StringUtils.hasText(token) && this.tokenProvider.validateToken(token)) {
             return Mono.fromCallable(() -> this.tokenProvider.getAuthentication(token))
