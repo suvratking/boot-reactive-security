@@ -20,7 +20,8 @@ public class GlobalExceptionHandler {
         var errors = ex.getFieldErrors().stream()
                 .collect(Collectors.toMap(
                         FieldError::getField,
-                        error -> error.getDefaultMessage() == null ? "" : error.getDefaultMessage()
+                        error -> error.getDefaultMessage() == null ? "" : error.getDefaultMessage(),
+                        (msg1, msg2) -> msg1 + "; " + msg2
                 ));
 
         return Mono.just(ResponseEntity.badRequest().body(errors));
