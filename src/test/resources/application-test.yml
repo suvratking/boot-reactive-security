@@ -1,0 +1,4 @@
+spring:
+  mongodb:
+    port: 0
+    host: localhost
