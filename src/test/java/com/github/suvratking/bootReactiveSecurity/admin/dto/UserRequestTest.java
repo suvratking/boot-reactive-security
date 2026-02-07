@@ -25,7 +25,7 @@ class UserRequestTest {
     @Test
     void userRequest_WithValidData_ShouldBeValid() {
         UserRequest request = new UserRequest(
-                "user123",
+                1L,
                 "testuser",
                 "test@example.com",
                 "password123",
@@ -59,7 +59,7 @@ class UserRequestTest {
     @Test
     void userRequest_WithEmptyId_ShouldBeInvalid() {
         UserRequest request = new UserRequest(
-                "",
+                0L,
                 "testuser",
                 "test@example.com",
                 "password123",
@@ -77,7 +77,7 @@ class UserRequestTest {
     @Test
     void userRequest_WithNullUsername_ShouldBeInvalid() {
         UserRequest request = new UserRequest(
-                "user123",
+                1L,
                 null,
                 "test@example.com",
                 "password123",
@@ -95,7 +95,7 @@ class UserRequestTest {
     @Test
     void userRequest_WithInvalidEmail_ShouldBeInvalid() {
         UserRequest request = new UserRequest(
-                "user123",
+                1L,
                 "testuser",
                 "invalid-email",
                 "password123",
@@ -113,7 +113,7 @@ class UserRequestTest {
     @Test
     void userRequest_WithNullEmail_ShouldBeInvalid() {
         UserRequest request = new UserRequest(
-                "user123",
+                1L,
                 "testuser",
                 null,
                 "password123",
@@ -131,7 +131,7 @@ class UserRequestTest {
     @Test
     void userRequest_WithNullPassword_ShouldBeInvalid() {
         UserRequest request = new UserRequest(
-                "user123",
+                1L,
                 "testuser",
                 "test@example.com",
                 null,
@@ -149,7 +149,7 @@ class UserRequestTest {
     @Test
     void userRequest_WithNullRoles_ShouldBeInvalid() {
         UserRequest request = new UserRequest(
-                "user123",
+                1L,
                 "testuser",
                 "test@example.com",
                 "password123",
@@ -167,7 +167,7 @@ class UserRequestTest {
     @Test
     void userRequest_WithEmptyRoles_ShouldBeInvalid() {
         UserRequest request = new UserRequest(
-                "user123",
+                1L,
                 "testuser",
                 "test@example.com",
                 "password123",
@@ -185,7 +185,7 @@ class UserRequestTest {
     @Test
     void userRequest_WithMultipleRoles_ShouldBeValid() {
         UserRequest request = new UserRequest(
-                "user123",
+                1L,
                 "testuser",
                 "test@example.com",
                 "password123",
@@ -201,7 +201,7 @@ class UserRequestTest {
     @Test
     void userRequest_WithActiveFalse_ShouldBeValid() {
         UserRequest request = new UserRequest(
-                "user123",
+                1L,
                 "testuser",
                 "test@example.com",
                 "password123",
@@ -217,7 +217,7 @@ class UserRequestTest {
     @Test
     void userRequest_Equality_ShouldBeEqual() {
         UserRequest request1 = new UserRequest(
-                "user123",
+                1L,
                 "testuser",
                 "test@example.com",
                 "password123",
@@ -226,7 +226,7 @@ class UserRequestTest {
         );
 
         UserRequest request2 = new UserRequest(
-                "user123",
+                1L,
                 "testuser",
                 "test@example.com",
                 "password123",
@@ -240,7 +240,7 @@ class UserRequestTest {
     @Test
     void userRequest_ToString_ShouldContainFields() {
         UserRequest request = new UserRequest(
-                "user123",
+                1L,
                 "testuser",
                 "test@example.com",
                 "password123",

@@ -1,11 +1,13 @@
 package com.github.suvratking.bootReactiveSecurity.admin.controller;
 
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import com.github.suvratking.bootReactiveSecurity.admin.dto.UserRequest;
 import com.github.suvratking.bootReactiveSecurity.admin.dto.UserResponse;
 import com.github.suvratking.bootReactiveSecurity.admin.service.UserService;
 import com.github.suvratking.bootReactiveSecurity.auth.entity.User;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -17,6 +19,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor
+@Tag(name = "Admin API", description = "The Admin API for user management")
 public class AdminController {
 
     private final UserService userService;
@@ -27,6 +30,7 @@ public class AdminController {
      * @return a {@link Mono} emitting a {@link ResponseEntity} containing the {@link UserResponse} with the list of users.
      */
     @GetMapping("/user")
+    @Operation(summary = "Get all users", description = "Retrieves a list of all users.")
     public Mono<ResponseEntity<UserResponse>> getUser() {
         return userService.findAll();
     }
@@ -38,6 +42,7 @@ public class AdminController {
      * @return a {@link Mono} emitting a {@link ResponseEntity} containing the created {@link User}.
      */
     @PostMapping("/user")
+    @Operation(summary = "Create a new user", description = "Creates a new user with the given details.")
     public Mono<ResponseEntity<User>> createUser(@Valid @RequestBody Mono<UserRequest> user) {
         return userService.createUser(user);
     }
@@ -50,7 +55,8 @@ public class AdminController {
      * @return a {@link Mono} emitting a {@link ResponseEntity} containing the updated {@link User}.
      */
     @PutMapping("/user/{id}")
-    public Mono<ResponseEntity<User>> updateUser(@Valid @RequestBody Mono<UserRequest> user, @PathVariable String id) {
+    @Operation(summary = "Update an existing user", description = "Updates an existing user with the given details.")
+    public Mono<ResponseEntity<User>> updateUser(@Valid @RequestBody Mono<UserRequest> user, @PathVariable Long id) {
         return userService.updateUser(user, id);
     }
 
@@ -61,7 +67,8 @@ public class AdminController {
      * @return a {@link Mono} emitting a {@link ResponseEntity} containing the deleted {@link User}.
      */
     @DeleteMapping("/user/{id}")
-    public Mono<ResponseEntity<User>> deleteUser(@PathVariable String id) {
+    @Operation(summary = "Delete a user", description = "Deletes a user by their unique identifier.")
+    public Mono<ResponseEntity<User>> deleteUser(@PathVariable Long id) {
         return userService.deleteUser(id);
     }
 
@@ -72,7 +79,8 @@ public class AdminController {
      * @return a {@link Mono} emitting a {@link ResponseEntity} containing the retrieved {@link User}.
      */
     @GetMapping("/user/{id}")
-    public Mono<ResponseEntity<User>> getUserById(@PathVariable String id) {
+    @Operation(summary = "Get a user by ID", description = "Retrieves a user by their unique identifier.")
+    public Mono<ResponseEntity<User>> getUserById(@PathVariable Long id) {
         return userService.findUserById(id);
     }
 

@@ -147,7 +147,7 @@ class AuthControllerTest {
     @Test
     void register_ShouldReturnCreatedUser() {
         UserRequest userRequest = new UserRequest(
-                "newuser", 
+                1L, 
                 "newuser", 
                 "newuser@example.com", 
                 "password", 
@@ -156,7 +156,7 @@ class AuthControllerTest {
         );
         
         User registeredUser = User.builder()
-                .id("newuser")
+                .id(1L)
                 .username("newuser")
                 .email("newuser@example.com")
                 .active(true)
@@ -181,7 +181,7 @@ class AuthControllerTest {
     @Test
     void register_WithInvalidEmail_ShouldReturnBadRequest() {
         UserRequest userRequest = new UserRequest(
-                "newuser", 
+                1L, 
                 "newuser", 
                 "invalid-email", 
                 "password", 
@@ -212,7 +212,7 @@ class AuthControllerTest {
     @Test
     void register_WithDuplicateUser_ShouldReturnConflict() {
         UserRequest userRequest = new UserRequest(
-                "existinguser", 
+                1L,
                 "existinguser", 
                 "existing@example.com", 
                 "password", 

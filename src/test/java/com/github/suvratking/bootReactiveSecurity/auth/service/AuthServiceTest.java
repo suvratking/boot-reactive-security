@@ -40,7 +40,7 @@ class AuthServiceTest {
     @BeforeEach
     void setUp() {
         user = User.builder()
-                .id("1")
+                .id(1L)
                 .username("testuser")
                 .email("test@example.com")
                 .password("encodedPassword")
@@ -48,12 +48,12 @@ class AuthServiceTest {
                 .roles(List.of("ROLE_USER"))
                 .build();
 
-        userRequest = new UserRequest("1", "testuser", "test@example.com", "password", true, List.of("ROLE_USER"));
+        userRequest = new UserRequest(1L, "testuser", "test@example.com", "password", true, List.of("ROLE_USER"));
     }
 
     @Test
     void register_ShouldReturnCreatedUser() {
-        when(userRepository.findById("1")).thenReturn(Mono.empty());
+        when(userRepository.findById(1L)).thenReturn(Mono.empty());
         when(passwordEncoder.encode("password")).thenReturn("encodedPassword");
         when(userRepository.save(any(User.class))).thenReturn(Mono.just(user));
 
@@ -67,13 +67,13 @@ class AuthServiceTest {
                 })
                 .verifyComplete();
 
-        verify(userRepository, times(1)).findById("1");
+        verify(userRepository, times(1)).findById(1L);
         verify(userRepository, times(1)).save(any(User.class));
     }
 
     @Test
     void register_ShouldThrowException_WhenUserExists() {
-        when(userRepository.findById("1")).thenReturn(Mono.just(user));
+        when(userRepository.findById(1L)).thenReturn(Mono.just(user));
 
         Mono<ResponseEntity<User>> result = authService.register(Mono.just(userRequest));
 
@@ -82,7 +82,7 @@ class AuthServiceTest {
                         throwable.getMessage().equals("User already exists"))
                 .verify();
 
-        verify(userRepository, times(1)).findById("1");
+        verify(userRepository, times(1)).findById(1L);
         verify(userRepository, never()).save(any(User.class));
     }
 }

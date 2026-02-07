@@ -52,7 +52,7 @@ class AdminControllerTest {
     @WithMockUser
     void getUser_ShouldReturnUserResponse() {
         User user = User.builder()
-                .id("1")
+                .id(1L)
                 .username("testuser")
                 .email("test@example.com")
                 .active(true)
@@ -74,9 +74,9 @@ class AdminControllerTest {
     @Test
     @WithMockUser
     void createUser_ShouldReturnCreatedUser() {
-        UserRequest request = new UserRequest("1", "testuser", "test@example.com", "password", true, List.of("ROLE_USER"));
+        UserRequest request = new UserRequest(1L, "testuser", "test@example.com", "password", true, List.of("ROLE_USER"));
         User user = User.builder()
-                .id("1")
+                .id(1L)
                 .username("testuser")
                 .email("test@example.com")
                 .active(true)
@@ -100,16 +100,16 @@ class AdminControllerTest {
     @Test
     @WithMockUser
     void updateUser_ShouldReturnUpdatedUser() {
-        UserRequest request = new UserRequest("1", "updateduser", "updated@example.com", "password", true, List.of("ROLE_USER"));
+        UserRequest request = new UserRequest(1L, "updateduser", "updated@example.com", "password", true, List.of("ROLE_USER"));
         User user = User.builder()
-                .id("1")
+                .id(1L)
                 .username("updateduser")
                 .email("updated@example.com")
                 .active(true)
                 .roles(List.of("ROLE_USER"))
                 .build();
 
-        when(userService.updateUser(any(), eq("1"))).thenReturn(Mono.just(ResponseEntity.ok(user)));
+        when(userService.updateUser(any(), eq(1L))).thenReturn(Mono.just(ResponseEntity.ok(user)));
 
         webTestClient.mutateWith(csrf())
                 .put()
@@ -126,11 +126,11 @@ class AdminControllerTest {
     @WithMockUser
     void deleteUser_ShouldReturnDeletedUser() {
         User user = User.builder()
-                .id("1")
+                .id(1L)
                 .username("testuser")
                 .build();
 
-        when(userService.deleteUser("1")).thenReturn(Mono.just(ResponseEntity.ok(user)));
+        when(userService.deleteUser(1L)).thenReturn(Mono.just(ResponseEntity.ok(user)));
 
         webTestClient.mutateWith(csrf())
                 .delete()
@@ -145,11 +145,11 @@ class AdminControllerTest {
     @WithMockUser
     void getUserById_ShouldReturnUser() {
         User user = User.builder()
-                .id("1")
+                .id(1L)
                 .username("testuser")
                 .build();
 
-        when(userService.findUserById("1")).thenReturn(Mono.just(ResponseEntity.ok(user)));
+        when(userService.findUserById(1L)).thenReturn(Mono.just(ResponseEntity.ok(user)));
 
         webTestClient.get()
                 .uri("/admin/user/1")

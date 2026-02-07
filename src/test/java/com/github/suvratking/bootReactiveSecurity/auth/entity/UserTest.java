@@ -12,7 +12,7 @@ class UserTest {
     @Test
     void userBuilder_ShouldCreateUserWithAllFields() {
         User user = User.builder()
-                .id("user-1")
+                .id(1L)
                 .username("testuser")
                 .email("test@example.com")
                 .password("password123")
@@ -20,7 +20,7 @@ class UserTest {
                 .roles(List.of("ROLE_USER"))
                 .build();
 
-        assertEquals("user-1", user.getId());
+        assertEquals(1L, user.getId());
         assertEquals("testuser", user.getUsername());
         assertEquals("test@example.com", user.getEmail());
         assertEquals("password123", user.getPassword());
@@ -32,7 +32,7 @@ class UserTest {
     @Test
     void userBuilder_WithDefaultValues_ShouldSetActiveTrue() {
         User user = User.builder()
-                .id("user-1")
+                .id(1L)
                 .username("testuser")
                 .email("test@example.com")
                 .password("password123")
@@ -44,7 +44,7 @@ class UserTest {
     @Test
     void userBuilder_WithDefaultValues_ShouldSetEmptyRolesList() {
         User user = User.builder()
-                .id("user-1")
+                .id(1L)
                 .username("testuser")
                 .email("test@example.com")
                 .password("password123")
@@ -58,7 +58,7 @@ class UserTest {
     void userBuilder_WithMultipleRoles_ShouldContainAllRoles() {
         List<String> roles = List.of("ROLE_USER", "ROLE_ADMIN", "ROLE_MANAGER");
         User user = User.builder()
-                .id("user-1")
+                .id(1L)
                 .username("testuser")
                 .email("test@example.com")
                 .password("password123")
@@ -74,7 +74,7 @@ class UserTest {
     @Test
     void userBuilder_WithActiveFalse_ShouldSetInactive() {
         User user = User.builder()
-                .id("user-1")
+                .id(1L)
                 .username("testuser")
                 .email("test@example.com")
                 .password("password123")
@@ -87,14 +87,14 @@ class UserTest {
     @Test
     void userSetter_ShouldUpdateFields() {
         User user = new User();
-        user.setId("user-1");
+        user.setId(1L);
         user.setUsername("testuser");
         user.setEmail("test@example.com");
         user.setPassword("password123");
         user.setActive(true);
         user.setRoles(List.of("ROLE_USER"));
 
-        assertEquals("user-1", user.getId());
+        assertEquals(1L, user.getId());
         assertEquals("testuser", user.getUsername());
         assertEquals("test@example.com", user.getEmail());
         assertEquals("password123", user.getPassword());
@@ -118,9 +118,9 @@ class UserTest {
     @Test
     void allArgsConstructor_ShouldCreateUserWithAllFields() {
         List<String> roles = List.of("ROLE_USER");
-        User user = new User("user-1", "testuser", "test@example.com", "password123", true, roles);
+        User user = new User(1L, "testuser", "test@example.com", "password123", true, roles);
 
-        assertEquals("user-1", user.getId());
+        assertEquals(1L, user.getId());
         assertEquals("testuser", user.getUsername());
         assertEquals("test@example.com", user.getEmail());
         assertEquals("password123", user.getPassword());
@@ -131,7 +131,7 @@ class UserTest {
     @Test
     void userEquality_ShouldBeEqualIfFieldsMatch() {
         User user1 = User.builder()
-                .id("user-1")
+                .id(1L)
                 .username("testuser")
                 .email("test@example.com")
                 .password("password123")
@@ -140,7 +140,7 @@ class UserTest {
                 .build();
 
         User user2 = User.builder()
-                .id("user-1")
+                .id(1L)
                 .username("testuser")
                 .email("test@example.com")
                 .password("password123")
@@ -154,13 +154,13 @@ class UserTest {
     @Test
     void userEquality_ShouldNotBeEqualIfIdDiffers() {
         User user1 = User.builder()
-                .id("user-1")
+                .id(1L)
                 .username("testuser")
                 .email("test@example.com")
                 .build();
 
         User user2 = User.builder()
-                .id("user-2")
+                .id(2L)
                 .username("testuser")
                 .email("test@example.com")
                 .build();
@@ -171,7 +171,7 @@ class UserTest {
     @Test
     void userToString_ShouldContainUserFields() {
         User user = User.builder()
-                .id("user-1")
+                .id(1L)
                 .username("testuser")
                 .email("test@example.com")
                 .build();
@@ -185,7 +185,7 @@ class UserTest {
     @Test
     void passwordShouldNotBeExposedInJson() {
         User user = User.builder()
-                .id("user-1")
+                .id(1L)
                 .username("testuser")
                 .email("test@example.com")
                 .password("secretpassword")
@@ -199,7 +199,7 @@ class UserTest {
     @Test
     void userWithEmptyRolesList_ShouldBeValid() {
         User user = User.builder()
-                .id("user-1")
+                .id(1L)
                 .username("testuser")
                 .email("test@example.com")
                 .password("password123")
@@ -216,7 +216,7 @@ class UserTest {
         roles.add("ROLE_USER");
 
         User user = User.builder()
-                .id("user-1")
+                .id(1L)
                 .username("testuser")
                 .email("test@example.com")
                 .password("password123")

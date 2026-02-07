@@ -55,7 +55,13 @@ public class SecurityConfiguration {
     SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http,
                                                 JwtTokenProvider tokenProvider,
                                                 ReactiveAuthenticationManager reactiveAuthenticationManager) {
-        final String WHITE_LIST_PATH = "/auth/**";
+        final String[] WHITE_LIST_PATH = {
+                "/auth/**",
+                "/swagger-ui.html",
+                "/swagger-ui/**",
+                "/v3/api-docs",
+                "/v3/api-docs/**"
+        };
 
         return http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))

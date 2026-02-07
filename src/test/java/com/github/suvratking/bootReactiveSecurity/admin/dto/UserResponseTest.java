@@ -12,14 +12,14 @@ class UserResponseTest {
     @Test
     void userResponse_WithUsers_ShouldContainAllUsers() {
         User user1 = User.builder()
-                .id("user1")
+                .id(1L)
                 .username("testuser1")
                 .email("test1@example.com")
                 .active(true)
                 .build();
 
         User user2 = User.builder()
-                .id("user2")
+                .id(2L)
                 .username("testuser2")
                 .email("test2@example.com")
                 .active(true)
@@ -45,7 +45,7 @@ class UserResponseTest {
     @Test
     void userResponse_WithSingleUser_ShouldContainThatUser() {
         User user = User.builder()
-                .id("user1")
+                .id(1L)
                 .username("testuser")
                 .email("test@example.com")
                 .active(true)
@@ -60,7 +60,7 @@ class UserResponseTest {
     @Test
     void userResponse_Equality_ShouldBeEqual() {
         User user = User.builder()
-                .id("user1")
+                .id(2L)
                 .username("testuser")
                 .email("test@example.com")
                 .active(true)
@@ -75,14 +75,14 @@ class UserResponseTest {
     @Test
     void userResponse_Equality_ShouldNotBeEqual() {
         User user1 = User.builder()
-                .id("user1")
+                .id(1L)
                 .username("testuser1")
                 .email("test1@example.com")
                 .active(true)
                 .build();
 
         User user2 = User.builder()
-                .id("user2")
+                .id(2L)
                 .username("testuser2")
                 .email("test2@example.com")
                 .active(true)
@@ -97,7 +97,7 @@ class UserResponseTest {
     @Test
     void userResponse_ToString_ShouldContainUserInfo() {
         User user = User.builder()
-                .id("user1")
+                .id(1L)
                 .username("testuser")
                 .email("test@example.com")
                 .active(true)
@@ -113,21 +113,21 @@ class UserResponseTest {
     @Test
     void userResponse_WithMultipleUsers_ShouldMaintainOrder() {
         User user1 = User.builder()
-                .id("user1")
+                .id(1L)
                 .username("testuser1")
                 .email("test1@example.com")
                 .active(true)
                 .build();
 
         User user2 = User.builder()
-                .id("user2")
+                .id(2L)
                 .username("testuser2")
                 .email("test2@example.com")
                 .active(true)
                 .build();
 
         User user3 = User.builder()
-                .id("user3")
+                .id(3L)
                 .username("testuser3")
                 .email("test3@example.com")
                 .active(true)
@@ -144,7 +144,7 @@ class UserResponseTest {
     @Test
     void userResponse_CanAccessUsersMultipleTimes() {
         User user = User.builder()
-                .id("user1")
+                .id(1L)
                 .username("testuser")
                 .email("test@example.com")
                 .active(true)
