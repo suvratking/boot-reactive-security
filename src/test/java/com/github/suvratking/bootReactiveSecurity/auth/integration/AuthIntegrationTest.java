@@ -47,7 +47,7 @@ class AuthIntegrationTest {
     @Test
     void register_ShouldCreateNewUser_AndThenLoginShouldWork() {
         UserRequest registerRequest = new UserRequest(
-                "integrationuser",
+                1L,
                 "integrationuser",
                 "integration@example.com",
                 "password123",
@@ -75,7 +75,7 @@ class AuthIntegrationTest {
     @Test
     void register_WithDuplicateUsername_ShouldFail() {
         UserRequest firstRequest = new UserRequest(
-                "duplicateuser",
+                1L,
                 "duplicateuser",
                 "first@example.com",
                 "password123",
@@ -84,7 +84,7 @@ class AuthIntegrationTest {
         );
 
         UserRequest secondRequest = new UserRequest(
-                "duplicateuser",
+                1L,
                 "duplicateuser",
                 "second@example.com",
                 "password123",
@@ -114,7 +114,7 @@ class AuthIntegrationTest {
     void authenticatedEndpoint_WithValidToken_ShouldBeAccessible() {
         // Create a user
         User user = User.builder()
-                .id("testuser")
+                .id(1L)
                 .username("testuser")
                 .email("test@example.com")
                 .active(true)
@@ -142,7 +142,7 @@ class AuthIntegrationTest {
     @Test
     void authEndpoint_ShouldNotRequireAuthentication() {
         UserRequest registerRequest = new UserRequest(
-                "publicuser",
+                1L,
                 "publicuser",
                 "public@example.com",
                 "password123",
@@ -162,7 +162,7 @@ class AuthIntegrationTest {
     @WithMockUser(username = "adminuser", roles = "ADMIN")
     void createUser_ShouldSucceedWithValidData() {
         UserRequest createRequest = new UserRequest(
-                "newadminuser",
+                1L,
                 "newadminuser",
                 "newadmin@example.com",
                 "password123",
@@ -186,7 +186,7 @@ class AuthIntegrationTest {
     void getAllUsers_ShouldReturnUserList() {
         // Create multiple users
         User user1 = User.builder()
-                .id("user1")
+                .id(1L)
                 .username("user1")
                 .email("user1@example.com")
                 .active(true)
@@ -194,7 +194,7 @@ class AuthIntegrationTest {
                 .build();
 
         User user2 = User.builder()
-                .id("user2")
+                .id(2L)
                 .username("user2")
                 .email("user2@example.com")
                 .active(true)
@@ -217,7 +217,7 @@ class AuthIntegrationTest {
     @WithMockUser(username = "adminuser", roles = "ADMIN")
     void updateUser_ShouldModifyExistingUser() {
         User existingUser = User.builder()
-                .id("updateuser")
+                .id(1L)
                 .username("updateuser")
                 .email("update@example.com")
                 .active(true)
@@ -226,7 +226,7 @@ class AuthIntegrationTest {
         userRepository.save(existingUser).block();
 
         UserRequest updateRequest = new UserRequest(
-                "updateuser",
+                1L,
                 "updatedusername",
                 "updated@example.com",
                 "newpassword123",
@@ -249,7 +249,7 @@ class AuthIntegrationTest {
     @WithMockUser(username = "adminuser", roles = "ADMIN")
     void deleteUser_ShouldRemoveUser() {
         User userToDelete = User.builder()
-                .id("deleteuser")
+                .id(1L)
                 .username("deleteuser")
                 .email("delete@example.com")
                 .active(true)
@@ -264,7 +264,7 @@ class AuthIntegrationTest {
                 .expectStatus().isOk();
 
         // Verify user is deleted
-        User deletedUser = userRepository.findById("deleteuser").block();
+        User deletedUser = userRepository.findById(1L).block();
         org.junit.jupiter.api.Assertions.assertNull(deletedUser);
     }
 
@@ -272,7 +272,7 @@ class AuthIntegrationTest {
     @WithMockUser(username = "adminuser", roles = "ADMIN")
     void getUserById_ShouldReturnSpecificUser() {
         User user = User.builder()
-                .id("specificuser")
+                .id(1L)
                 .username("specificuser")
                 .email("specific@example.com")
                 .active(true)

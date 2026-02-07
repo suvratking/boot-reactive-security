@@ -1,6 +1,7 @@
 package com.github.suvratking.bootReactiveSecurity.auth.repository;
 
 import com.github.suvratking.bootReactiveSecurity.auth.entity.User;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ class UserRepositoryTest {
         userRepository.deleteAll().block();
         
         testUser = User.builder()
-                .id("test-user-1")
+                .id(1L)
                 .username("testuser")
                 .email("test@example.com")
                 .password("encodedPassword")
@@ -52,10 +53,10 @@ class UserRepositoryTest {
     void findById_ShouldReturnUser() {
         userRepository.save(testUser).block();
 
-        userRepository.findById("test-user-1")
+        userRepository.findById(1L)
                 .as(StepVerifier::create)
                 .assertNext(foundUser -> {
-                    assertEquals("test-user-1", foundUser.getId());
+                    assertEquals(1L, foundUser.getId());
                     assertEquals("testuser", foundUser.getUsername());
                 })
                 .verifyComplete();
@@ -63,7 +64,7 @@ class UserRepositoryTest {
 
     @Test
     void findById_WithNonExistentId_ShouldReturnEmpty() {
-        userRepository.findById("non-existent-id")
+        userRepository.findById(1L)
                 .as(StepVerifier::create)
                 .verifyComplete();
     }
@@ -91,7 +92,7 @@ class UserRepositoryTest {
     @Test
     void findAll_ShouldReturnAllUsers() {
         User user2 = User.builder()
-                .id("test-user-2")
+                .id(2L)
                 .username("testuser2")
                 .email("test2@example.com")
                 .password("encodedPassword")
@@ -133,7 +134,7 @@ class UserRepositoryTest {
                 .as(StepVerifier::create)
                 .verifyComplete();
 
-        userRepository.findById("test-user-1")
+        userRepository.findById(1L)
                 .as(StepVerifier::create)
                 .verifyComplete();
     }
@@ -142,11 +143,11 @@ class UserRepositoryTest {
     void deleteById_ShouldRemoveUserById() {
         userRepository.save(testUser).block();
 
-        userRepository.deleteById("test-user-1")
+        userRepository.deleteById(1L)
                 .as(StepVerifier::create)
                 .verifyComplete();
 
-        userRepository.findById("test-user-1")
+        userRepository.findById(1L)
                 .as(StepVerifier::create)
                 .verifyComplete();
     }
@@ -155,7 +156,7 @@ class UserRepositoryTest {
     void existsById_WhenUserExists_ShouldReturnTrue() {
         userRepository.save(testUser).block();
 
-        userRepository.existsById("test-user-1")
+        userRepository.existsById(1L)
                 .as(StepVerifier::create)
                 .assertNext(exists -> assertTrue(exists))
                 .verifyComplete();
@@ -163,16 +164,16 @@ class UserRepositoryTest {
 
     @Test
     void existsById_WhenUserNotExists_ShouldReturnFalse() {
-        userRepository.existsById("non-existent-id")
+        userRepository.existsById(4L)
                 .as(StepVerifier::create)
-                .assertNext(exists -> assertFalse(exists))
+                .assertNext(Assertions::assertFalse)
                 .verifyComplete();
     }
 
     @Test
     void count_ShouldReturnNumberOfUsers() {
         User user2 = User.builder()
-                .id("test-user-2")
+                .id(2L)
                 .username("testuser2")
                 .email("test2@example.com")
                 .password("encodedPassword")

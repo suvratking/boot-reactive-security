@@ -43,7 +43,7 @@ class UserServiceTest {
     @BeforeEach
     void setUp() {
         user = User.builder()
-                .id("1")
+                .id(1L)
                 .username("testuser")
                 .email("test@example.com")
                 .password("encodedPassword")
@@ -51,7 +51,7 @@ class UserServiceTest {
                 .roles(List.of("ROLE_USER"))
                 .build();
 
-        userRequest = new UserRequest("1", "testuser", "test@example.com", "password", true, List.of("ROLE_USER"));
+        userRequest = new UserRequest(1L, "testuser", "test@example.com", "password", true, List.of("ROLE_USER"));
     }
 
     @Test
@@ -74,7 +74,7 @@ class UserServiceTest {
 
     @Test
     void createUser_ShouldReturnCreatedUser() {
-        when(userRepository.findById("1")).thenReturn(Mono.empty());
+        when(userRepository.findById(1L)).thenReturn(Mono.empty());
         when(passwordEncoder.encode("password")).thenReturn("encodedPassword");
         when(userRepository.save(any(User.class))).thenReturn(Mono.just(user));
 
@@ -88,13 +88,13 @@ class UserServiceTest {
                 })
                 .verifyComplete();
 
-        verify(userRepository, times(1)).findById("1");
+        verify(userRepository, times(1)).findById(1L);
         verify(userRepository, times(1)).save(any(User.class));
     }
 
     @Test
     void createUser_ShouldThrowException_WhenUserExists() {
-        when(userRepository.findById("1")).thenReturn(Mono.just(user));
+        when(userRepository.findById(1L)).thenReturn(Mono.just(user));
 
         Mono<ResponseEntity<User>> result = userService.createUser(Mono.just(userRequest));
 
@@ -103,16 +103,16 @@ class UserServiceTest {
                         ((ResponseStatusException) throwable).getStatusCode() == HttpStatus.CONFLICT)
                 .verify();
 
-        verify(userRepository, times(1)).findById("1");
+        verify(userRepository, times(1)).findById(1L);
         verify(userRepository, never()).save(any(User.class));
     }
 
     @Test
     void updateUser_ShouldReturnUpdatedUser() {
-        when(userRepository.findById("1")).thenReturn(Mono.just(user));
+        when(userRepository.findById(1L)).thenReturn(Mono.just(user));
         when(userRepository.save(any(User.class))).thenReturn(Mono.just(user));
 
-        Mono<ResponseEntity<User>> result = userService.updateUser(Mono.just(userRequest), "1");
+        Mono<ResponseEntity<User>> result = userService.updateUser(Mono.just(userRequest), 1L);
 
         StepVerifier.create(result)
                 .assertNext(responseEntity -> {
@@ -122,58 +122,58 @@ class UserServiceTest {
                 })
                 .verifyComplete();
 
-        verify(userRepository, times(1)).findById("1");
+        verify(userRepository, times(1)).findById(1L);
         verify(userRepository, times(1)).save(any(User.class));
     }
 
     @Test
     void updateUser_ShouldThrowException_WhenUserNotFound() {
-        when(userRepository.findById("1")).thenReturn(Mono.empty());
+        when(userRepository.findById(1L)).thenReturn(Mono.empty());
 
-        Mono<ResponseEntity<User>> result = userService.updateUser(Mono.just(userRequest), "1");
+        Mono<ResponseEntity<User>> result = userService.updateUser(Mono.just(userRequest), 1L);
 
         StepVerifier.create(result)
                 .expectErrorMatches(throwable -> throwable instanceof RuntimeException &&
                         throwable.getMessage().equals("User not found with id: 1"))
                 .verify();
 
-        verify(userRepository, times(1)).findById("1");
+        verify(userRepository, times(1)).findById(1L);
         verify(userRepository, never()).save(any(User.class));
     }
 
     @Test
     void deleteUser_ShouldReturnDeletedUser() {
-        when(userRepository.findById("1")).thenReturn(Mono.just(user));
+        when(userRepository.findById(1L)).thenReturn(Mono.just(user));
         when(userRepository.delete(any(User.class))).thenReturn(Mono.empty());
 
-        Mono<ResponseEntity<User>> result = userService.deleteUser("1");
+        Mono<ResponseEntity<User>> result = userService.deleteUser(1L);
 
         StepVerifier.create(result)
                 .assertNext(responseEntity -> {
                     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
                     assertNotNull(responseEntity.getBody());
-                    assertEquals("1", responseEntity.getBody().getId());
+                    assertEquals(1L, responseEntity.getBody().getId());
                 })
                 .verifyComplete();
 
-        verify(userRepository, times(1)).findById("1");
+        verify(userRepository, times(1)).findById(1L);
         verify(userRepository, times(1)).delete(any(User.class));
     }
 
     @Test
     void findUserById_ShouldReturnUser() {
-        when(userRepository.findById("1")).thenReturn(Mono.just(user));
+        when(userRepository.findById(1L)).thenReturn(Mono.just(user));
 
-        Mono<ResponseEntity<User>> result = userService.findUserById("1");
+        Mono<ResponseEntity<User>> result = userService.findUserById(1L);
 
         StepVerifier.create(result)
                 .assertNext(responseEntity -> {
                     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
                     assertNotNull(responseEntity.getBody());
-                    assertEquals("1", responseEntity.getBody().getId());
+                    assertEquals(1L, responseEntity.getBody().getId());
                 })
                 .verifyComplete();
 
-        verify(userRepository, times(1)).findById("1");
+        verify(userRepository, times(1)).findById(1L);
     }
 }
