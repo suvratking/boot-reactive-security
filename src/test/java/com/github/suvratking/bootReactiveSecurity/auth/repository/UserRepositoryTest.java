@@ -3,6 +3,7 @@ package com.github.suvratking.bootReactiveSecurity.auth.repository;
 import com.github.suvratking.bootReactiveSecurity.auth.entity.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest;
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataMongoTest
 @DirtiesContext
+@Disabled("Requires MongoDB/DataMongo slice; excluded from DB-free test runs.")
 class UserRepositoryTest {
 
     @Autowired

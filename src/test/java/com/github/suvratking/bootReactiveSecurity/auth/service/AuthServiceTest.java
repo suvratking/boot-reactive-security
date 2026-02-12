@@ -54,6 +54,7 @@ class AuthServiceTest {
     @Test
     void register_ShouldReturnCreatedUser() {
         when(userRepository.findById(1L)).thenReturn(Mono.empty());
+        when(userRepository.findTopByOrderByIdDesc()).thenReturn(Mono.just(user));
         when(passwordEncoder.encode("password")).thenReturn("encodedPassword");
         when(userRepository.save(any(User.class))).thenReturn(Mono.just(user));
 

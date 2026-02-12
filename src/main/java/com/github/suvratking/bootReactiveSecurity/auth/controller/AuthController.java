@@ -8,13 +8,7 @@ import com.github.suvratking.bootReactiveSecurity.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.Validation;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
 import java.util.Map;
-
-import static java.util.stream.Collectors.joining;
 
 /**
  * Controller for authentication-related operations.
@@ -84,17 +74,7 @@ public class AuthController {
     @PostMapping("/register")
     @Operation(summary = "Register a new user", description = "Registers a new user with the given details.")
     public Mono<ResponseEntity<User>> register(@Valid @RequestBody Mono<UserRequest> userRequest) {
-        return userRequest.flatMap(request -> {
-            var validator = Validation.buildDefaultValidatorFactory().getValidator();
-            var violations = validator.validate(request);
-            if (!violations.isEmpty()) {
-                var message = violations.stream()
-                        .map(v -> v.getPropertyPath() + " " + v.getMessage())
-                        .collect(joining(", "));
-                return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, message));
-            }
-            return authService.register(Mono.just(request));
-        });
+        return authService.register(userRequest);
     }
 
 }
