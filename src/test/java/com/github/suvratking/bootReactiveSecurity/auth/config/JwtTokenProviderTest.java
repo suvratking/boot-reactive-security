@@ -91,6 +91,8 @@ class JwtTokenProviderTest {
 
         assertNotNull(token);
         assertTrue(tokenProvider.validateToken(token));
+        Authentication extractedAuth = tokenProvider.getAuthentication(token);
+        assertTrue(extractedAuth.getAuthorities().isEmpty());
     }
 
     @Test
@@ -127,6 +129,11 @@ class JwtTokenProviderTest {
         String emptyToken = "";
 
         assertFalse(tokenProvider.validateToken(emptyToken));
+    }
+
+    @Test
+    void validateToken_WithNullToken_ShouldReturnFalse() {
+        assertFalse(tokenProvider.validateToken(null));
     }
 
     @Test

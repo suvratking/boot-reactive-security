@@ -52,13 +52,6 @@ public class AuthService {
                 .map(ResponseEntity::ok);
     }
 
-    @PostConstruct
-    public void test() {
-        userRepository
-                .findTopByOrderByIdDesc()
-                .subscribe(IO::println);
-    }
-
     private Mono<Long> getMaxId() {
         return userRepository
                 .findTopByOrderByIdDesc()

@@ -1,8 +1,11 @@
 package com.github.suvratking.bootReactiveSecurity.auth.config;
 
+import com.github.suvratking.bootReactiveSecurity.auth.repository.UserRepository;
+import com.github.suvratking.bootReactiveSecurity.auth.service.AuthService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
@@ -16,6 +19,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 class CorsConfigTest {
+
+    @MockitoBean
+    private UserRepository userRepository;
+
+    @MockitoBean
+    private AuthService authService;
 
     @Autowired
     private CorsConfigurationSource corsConfigurationSource;

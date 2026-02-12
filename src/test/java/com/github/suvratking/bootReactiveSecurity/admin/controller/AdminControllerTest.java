@@ -4,6 +4,8 @@ import com.github.suvratking.bootReactiveSecurity.admin.dto.UserRequest;
 import com.github.suvratking.bootReactiveSecurity.admin.dto.UserResponse;
 import com.github.suvratking.bootReactiveSecurity.admin.service.UserService;
 import com.github.suvratking.bootReactiveSecurity.auth.entity.User;
+import com.github.suvratking.bootReactiveSecurity.auth.repository.UserRepository;
+import com.github.suvratking.bootReactiveSecurity.auth.service.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,6 +38,12 @@ class AdminControllerTest {
 
     @Autowired
     private ApplicationContext applicationContext;
+
+    @MockitoBean
+    private UserRepository userRepository;
+
+    @MockitoBean
+    private AuthService authService;
 
     @MockitoBean
     private UserService userService;
